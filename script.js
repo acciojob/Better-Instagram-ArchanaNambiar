@@ -1,5 +1,6 @@
 //your code here
-// Function to handle the drag start event
+
+ // Function to handle the drag start event
 function dragStart(event) {
   event.dataTransfer.setData("text/plain", event.target.id);
 }
@@ -12,27 +13,25 @@ function dragOver(event) {
 // Function to handle the drop event
 function drop(event) {
   event.preventDefault();
-  const dragId = event.dataTransfer.getData("text");
-  const dropId = event.target.id;
+  const data = event.dataTransfer.getData("text");
+  const draggedElement = document.getElementById(data);
+  const targetElement = event.target;
 
-  // Swap the background images
-  const dragElement = document.getElementById(dragId);
-  const dropElement = document.getElementById(dropId);
-  const tempImage = dragElement.style.backgroundImage;
-  dragElement.style.backgroundImage = dropElement.style.backgroundImage;
-  dropElement.style.backgroundImage = tempImage;
-}
+  if (targetElement.classList.contains("image")) {
+    // Swap the background images by swapping their styles
+    const draggedImgStyle = draggedElement.style.backgroundImage;
+    const targetImgStyle = targetElement.style.backgroundImage;
 
-// Add event listeners to each div to enable drag and drop
-function addDragDropListeners() {
-  const imageDivs = document.getElementsByClassName("image");
-  for (let i = 0; i < imageDivs.length; i++) {
-    const div = imageDivs[i];
-    div.addEventListener("dragstart", dragStart);
-    div.addEventListener("dragover", dragOver);
-    div.addEventListener("drop", drop);
+    draggedElement.style.backgroundImage = targetImgStyle;
+    targetElement.style.backgroundImage = draggedImgStyle;
   }
 }
 
-// Call the function to add drag and drop listeners when the page loads
-window.addEventListener("load", addDragDropListeners);
+// Add event listeners to all draggable elements
+const draggableElements = document.querySelectorAll(".image");
+draggableElements.forEach((element) => {
+  element.addEventListener("dragstart", dragStart);
+  element.addEventListener("dragover", dragOver);
+  element.addEventListener("drop", drop);
+});
+
