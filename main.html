@@ -18,5 +18,34 @@
       <div draggable="true" class="image" id = "div5">Image 5</div>
       <div draggable="true" class="image" id = "div6">Image 6</div>
     </div>
+	  <script>
+    const divs = document.querySelectorAll('.image');
+
+    let sourceDiv;
+
+    divs.forEach(div => {
+      div.addEventListener('dragstart', dragStart);
+      div.addEventListener('dragover', dragOver);
+      div.addEventListener('drop', drop);
+    });
+
+    function dragStart(event) {
+      sourceDiv = this;
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/html', this.innerHTML);
+    }
+
+    function dragOver(event) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+    }
+
+    function drop(event) {
+      if (sourceDiv !== this) {
+        sourceDiv.innerHTML = this.innerHTML;
+        this.innerHTML = event.dataTransfer.getData('text/html');
+      }
+    }
+  </script>
   </body>
 </html>
